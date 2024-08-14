@@ -22,15 +22,22 @@ def is_eng_sub(sub_lang: str) -> bool:
 
 
 from youtube_transcript_api import YouTubeTranscriptApi
+"""
+    Retrieves the transcript for the given YouTube video URL.
+    
+    Args:
+        youtube_url (str): The URL of the YouTube video to retrieve the transcript for.
+    
+    Returns:
+        str: The full transcript text for the video.
+    """
 def get_transcript(youtube_url: str) -> str:
     id = retrieve_video_id(youtube_url)
     
     transcript_list = YouTubeTranscriptApi.list_transcripts(id)
-    
     transcript = transcript_list.find_manually_created_transcript(ACCEPTED_LANGUAGE)
 
     full = merge_transcript_into_full_text(transcript)
-    
     return full
 
 
