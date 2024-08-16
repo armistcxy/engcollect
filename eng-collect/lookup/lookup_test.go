@@ -23,7 +23,7 @@ func TestLookUpWord(t *testing.T) {
 			expectedWord: Word{
 				Name:       "milk",
 				Level:      "A1",
-				Definition: "the white liquid produced by cows, goats, and sheep and used by humans as a drink or for making butter, cheese, etc",
+				Definition: "the white liquid produced by cows, goats, and sheep and used by humans as a drink or for making butter, cheese, etc.",
 				Example:    "Do you take milk in your tea?",
 			},
 			expectedError: nil,
