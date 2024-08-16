@@ -7,6 +7,8 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
+// TODO: add context for LookUpWord
+
 const CrawlURL = "https://dictionary.cambridge.org/dictionary/english/"
 
 func LookUpWord(word string) (*Word, error) {
@@ -75,3 +77,63 @@ type Word struct {
 
 var ErrWordNotFound = errors.New("word not found")
 var ErrDenyCrawl = errors.New("being denied to crawl")
+
+// in this package there's no function to execute massive requests concurrently, I will define in internal package to do this function
+// The reason is this package may reused later ? (isn't it xD)
+
+// If you're curious, here is an example
+
+/*
+
+type LookUpResponse struct {
+	word *lookup.Word
+	err  error // I don't really know whether this could be a good idea or not
+}
+
+func MassiveRequest(words []string) (<-chan LookUpResponse, chan struct{}) {
+	responseChannel := make(chan LookUpResponse)
+	done := make(chan struct{})
+
+	lookUpOne := func(word string) {
+		result, err := lookup.LookUpWord(word)
+
+		responseChannel <- LookUpResponse{
+			word: result,
+			err:  err,
+		}
+	}
+
+	for _, word := range words {
+		go lookUpOne(word)
+	}
+
+	go func() {
+		<-done // Let the client decide when to stop
+		close(responseChannel)
+		close(done)
+	}()
+
+	return responseChannel, done
+}
+
+func main() {
+	words := []string{"cow", "count", "crown", "clown"}
+
+	responseChannel, done := MassiveRequest(words)
+	responseCount := 0
+
+	for response := range responseChannel {
+		if response.err != nil {
+			fmt.Println(response.err)
+		} else {
+			fmt.Printf("%+v\n", response.word)
+		}
+
+		responseCount += 1
+		if responseCount == len(words) {
+			done <- struct{}{}
+		}
+	}
+}
+
+*/
